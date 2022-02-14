@@ -49,7 +49,7 @@ cd "${KERNEL_PATH}" || exit
 
 cd ${KERNEL_PATH}
 git fetch --tags
-tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+tag=$(git describe --tags "$(git rev-list --tags --skip=2 --max-count=1)")
 git checkout "$tag" -b latest
 
 KERNEL_VERSION=$tag
@@ -85,7 +85,7 @@ echo "$(uname -r)"
 echo "$(ls /boot/)"
 
 # Copy the config
-cp config-5.14.0-kali4-amd64 "${KERNEL_PATH}/.config"
+cp "${WORKING_PATH}/patches/config-5.14.0-kali4-amd64" "${KERNEL_PATH}/.config"
 
 # Make config friendly with vanilla kernel
 sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${KERNEL_PATH}/.config"
@@ -96,7 +96,6 @@ sed -i 's/CONFIG_DEBUG_INFO=y/# CONFIG_DEBUG_INFO is not set/g' "${KERNEL_PATH}/
 # Make the config
 make olddefconfig
 
-make clean
 
 # Get rid of the dirty tag
 echo "" >"${KERNEL_PATH}"/.scmversion
