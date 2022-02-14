@@ -32,7 +32,7 @@ jobs:
         id: build
         run: |
           mkdir /tmp/artifacts
-          sudo ./build_in_docker.sh
+          sudo ./build.sh
           cd /tmp/artifacts
 
       - name: Release
