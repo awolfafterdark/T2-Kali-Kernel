@@ -28,7 +28,7 @@ get_next_version () {
 rm -rfv ./*.deb
 
 mkdir "${WORKING_PATH}" && cd "${WORKING_PATH}"
-cp -rf "${REPO_PATH}"/{patches} "${WORKING_PATH}"
+cp -rf "${REPO_PATH}"/patches "${WORKING_PATH}"
 rm -rf "${KERNEL_PATH}"
 
 ### Dependencies
@@ -46,8 +46,8 @@ cd "${KERNEL_PATH}" || exit
 
 cd ${KERNEL_PATH}
 git fetch --tags
-tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-git checkout $tag -b latest
+tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+git checkout "$tag" -b latest
 
 KERNEL_VERSION=$tag
 echo "Kernel version: ${KERNEL_VERSION}"
@@ -80,7 +80,7 @@ cd "${KERNEL_PATH}"
 make clean
 
 # Copy the config
-cp /boot/config-$(uname -r) "${KERNEL_PATH}/.config"
+cp /boot/config-'$(uname -r)' "${KERNEL_PATH}/.config"
 
 # Make config friendly with vanilla kernel
 sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${KERNEL_PATH}/.config"
