@@ -80,7 +80,7 @@ cd "${KERNEL_PATH}"
 make clean
 
 # Copy the config
-cp /boot/config-'$(uname -r)' "${KERNEL_PATH}/.config"
+cp /boot/config-"$(uname -r)" "${KERNEL_PATH}/.config"
 
 # Make config friendly with vanilla kernel
 sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${KERNEL_PATH}/.config"
