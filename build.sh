@@ -6,6 +6,7 @@ set -eu -o pipefail
 PKGREL=1
 
 KERNEL_REPOSITORY=https://gitlab.com/kalilinux/packages/linux.git
+#KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 
 APPLE_BCE_REPOSITORY=https://github.com/t2linux/apple-bce-drv.git
 APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
@@ -40,24 +41,34 @@ apt update
 apt install -y build-essential fakeroot libncurses-dev bison flex libssl-dev libelf-dev \
   openssl dkms libudev-dev libpci-dev libiberty-dev autoconf wget xz-utils git \
   libcap-dev bc rsync cpio debhelper kernel-wedge curl gawk dwarves
+apt upgrade
+apt install linux-source
+echo ls /usr/src/
 
-git clone "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
+xzcat /usr/src/*.patch.xz | patch -p1
+
+mkdir -p ${KERNEL_PATH}
+
+cp -r /usr/src/linux-*/* ${KERNEL_PATH}
+
+#git clone "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 
 git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
 git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-ibridge"
 cd "${KERNEL_PATH}" || exit
 
-cd ${KERNEL_PATH}
-git fetch --tags
-tag=$(git describe --tags "$(git rev-list --tags --skip=2 --max-count=1)")
-git checkout "$tag" -b latest
+# cd ${KERNEL_PATH}
+# git fetch --tags
+# tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+# git checkout "$tag" -b latest
 
-KERNEL_VERSION=$tag
-echo "Kernel version: ${KERNEL_VERSION}"
+# KERNEL_VERSION=$tag
+# echo "Kernel version: ${KERNEL_VERSION}"
 
 #### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... "
-KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
+#KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
+WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
 
 #### Apply patches
 cd "${KERNEL_PATH}" || exit
@@ -107,6 +118,7 @@ make -j "$(getconf _NPROCESSORS_ONLN)" deb-pkg LOCALVERSION=-t2 KDEB_PKGVERSION=
 echo >&2 "===]> Info: Copying debs and calculating SHA256 ... "
 #cp -rfv ../*.deb "${REPO_PATH}/"
 #cp -rfv "${KERNEL_PATH}/.config" "${REPO_PATH}/kernel_config_${KERNEL_VERSION}"
-cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}"
+#cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}"
+cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config"
 cp -rfv ../*.deb /tmp/artifacts/
 sha256sum ../*.deb >/tmp/artifacts/sha256
