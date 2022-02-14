@@ -20,6 +20,9 @@ echo "Current path: ${REPO_PATH}"
 echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
+echo "$(uname -r)"
+ls /boot/
+
 get_next_version () {
   echo $PKGREL
 }
@@ -78,8 +81,11 @@ echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
 
+echo "$(uname -r)"
+echo "$(ls /boot/)"
+
 # Copy the config
-cp /boot/config-"$(uname -r)" "${KERNEL_PATH}/.config"
+cp config-5.14.0-kali4-amd64 "${KERNEL_PATH}/.config"
 
 # Make config friendly with vanilla kernel
 sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${KERNEL_PATH}/.config"
