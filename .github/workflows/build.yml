@@ -7,4 +7,4 @@ jobs:
     steps:
       - name: Build "T2-Kali-Kernel"
         id: hello
-        uses: rodrigoluglio/T2-Kali-Kernel
+        uses: rodrigoluglio/T2-Kali-Kernel@v1
