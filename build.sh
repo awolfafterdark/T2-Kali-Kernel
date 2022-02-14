@@ -46,7 +46,7 @@ cd "${KERNEL_PATH}" || exit
 
 cd ${KERNEL_PATH}
 git fetch --tags
-tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
 git checkout "$tag" -b latest
 
 KERNEL_VERSION=$tag
