@@ -1,50 +1,10 @@
----
-name: Build Kernel Package
-
-# yamllint disable-line rule:truthy
-on: [push, pull_request]
+on: [push]
 
 jobs:
-  lint:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: "Checkout repo"
-        uses: actions/checkout@v2
-      - name: "Set up Python 3.9"
-        uses: actions/setup-python@v2
-      - name: "Install dependencies"
-        run: |
-          python -m pip install --upgrade pip
-          pip install yamllint
-          sudo apt-get install shellcheck bash
-      - name: "Analysing the code"
-        run: |
-          yamllint .
-          shellcheck ./*.sh
-  build:
-    needs: [lint]
+  hello_world_job:
     runs-on: ubuntu-latest
+    name: A job to say hello
     steps:
-      - name: "Checkout Repo"
-        uses: actions/checkout@v2
-
-      - name: Build script
-        id: build
-        run: |
-          mkdir /tmp/artifacts
-          sudo ./build.sh
-          cd /tmp/artifacts
-
-      - name: Release
-        if: github.ref == 'refs/heads/Mainline'
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            /tmp/artifacts/Packages.gz
-            /tmp/artifacts/sha256
-            /tmp/artifacts/*.deb
-          tag_name: v${{ steps.build.outputs.tag }}
-          draft: false
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build "T2-Kali-Kernel"
+        id: hello
+        uses: actions/T2-Kali-Kernel@v1
