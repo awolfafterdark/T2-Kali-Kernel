@@ -8,4 +8,4 @@ COPY patch_driver.sh /patch_driver.sh
 COPY build.sh /build.sh  
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/build.sh"]
+RUN  /bin/bash -c './build.sh'
