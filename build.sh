@@ -77,7 +77,6 @@ done < <(find "${WORKING_PATH}/patches" -type f -name "*.patch" | sort)
 echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
-make clean
 
 # Copy the config
 cp /boot/config-"$(uname -r)" "${KERNEL_PATH}/.config"
@@ -90,6 +89,8 @@ sed -i 's/CONFIG_DEBUG_INFO=y/# CONFIG_DEBUG_INFO is not set/g' "${KERNEL_PATH}/
 
 # Make the config
 make olddefconfig
+
+make clean
 
 # Get rid of the dirty tag
 echo "" >"${KERNEL_PATH}"/.scmversion
