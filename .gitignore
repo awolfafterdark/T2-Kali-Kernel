@@ -1,3 +1,11 @@
 /patches/custom-drivers.patch
 /releases
 /linux-*
+*.tar.sign
+*.tar.xz
+*.pkg.tar.*
+src/
+pkg/
+apple-bce/
+apple-ibridge/
+t2linux-linux

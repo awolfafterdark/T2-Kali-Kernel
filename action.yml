@@ -1,7 +1,0 @@
-# action.yml
-name: "T2-Kali-Kernel"
-description: "Kali linux Kernel for T2 Macbook Pro"
-
-runs:
-  using: "docker"
-  image: "Dockerfile"
