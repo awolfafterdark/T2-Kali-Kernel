@@ -5,8 +5,8 @@ set -eu -o pipefail
 
 PKGREL=1
 
-# KERNEL_REPOSITORY=https://gitlab.com/kalilinux/packages/linux.git
-# KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+# KERNEL_REPOSITORY=https://gitlab.com/linux-kernel/linux
+# KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
 
 
 APPLE_BCE_REPOSITORY=https://github.com/t2linux/apple-bce-drv.git
